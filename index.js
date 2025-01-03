@@ -17,16 +17,16 @@ const imagekit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
-app.use(cors());
-// app.use(
-//   cors({
-//     origin: "https://graphicsground.com",
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-//     credentials: true,
-//     // allowedHeaders: ["Content-Type", "Authorization"],
-//   })
-// );
-app.use(express.json());
+const corsOptions = {
+  origin: "https://graphicsground.com/", // or '*' for all origins (not recommended for production)
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+// app.use(cors());
+app.use(express.json({ limit: "50mb" })); // Adjust as needed
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(bodyParser.json());
 
 const client = new MongoClient(process.env.MONGODB_URI);
